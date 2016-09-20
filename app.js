@@ -39,29 +39,6 @@ app.use(session({
   })
 }));
 
-var multer = require('multer');
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './public/images')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
-  }
-});
-var upload = multer({ storage: storage });
-app.post('/upload', upload.fields([
-    {name: 'file1'},
-    {name: 'file2'},
-    {name: 'file3'},
-    {name: 'file4'},
-    {name: 'file5'}
-]), function(req, res, next){
-    for(var i in req.files){
-        console.log(req.files[i]);
-    }
-    req.flash('success', '文件上传成功!');
-    res.redirect('/upload');
-});
 
 
 /*
