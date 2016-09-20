@@ -225,6 +225,19 @@ module.exports = function(app) {
       res.redirect(url);//成功！返回文章页
     });
   });
+  app.get('/remove/:name/:day/:title', checkLogin);
+  app.get('/remove/:name/:day/:title', function (req, res) {
+    var currentUser = req.session.user;
+    Post.remove(currentUser.name, req.params.day, req.params.title, function (err) {
+      if (err) {
+        req.flash('error', err); 
+        return res.redirect('back');
+      }
+      req.flash('success', '删除成功!');
+      res.redirect('/');
+    });
+  });
+
 
   function checkLogin(req, res, next) {
     if (!req.session.user) {
