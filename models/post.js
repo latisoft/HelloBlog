@@ -150,4 +150,33 @@ Post.edit = function(name, day, title, callback) {
   });
 };
 
-
+//更新一篇文章及其相关信息
+Post.update = function(name, day, title, post, callback) {
+  //打开数据库
+  mongodb.open(function (err, db) {
+    if (err) {
+      return callback(err);
+    }
+    //读取 posts 集合
+    db.collection('posts', function (err, collection) {
+      if (err) {
+        mongodb.close();
+        return callback(err);
+      }
+      //更新文章内容
+      collection.update({
+        "name": name,
+        "time.day": day,
+        "title": title
+      }, {
+        $set: {post: post}
+      }, function (err) {
+        mongodb.close();
+        if (err) {
+          return callback(err);
+        }
+        callback(null);
+      });
+    });
+  });
+};
